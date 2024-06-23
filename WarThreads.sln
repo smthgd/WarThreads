@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35013.160
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WarThreads", "WarThreads\WarThreads.csproj", "{728C268E-803B-4850-B268-CCB6CF324BBA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{728C268E-803B-4850-B268-CCB6CF324BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728C268E-803B-4850-B268-CCB6CF324BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728C268E-803B-4850-B268-CCB6CF324BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728C268E-803B-4850-B268-CCB6CF324BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {331A26CF-60EB-40FD-8708-B608EA4B2869}
+	EndGlobalSection
+EndGlobal
