@@ -35,7 +35,8 @@
             // 
             // Gun
             // 
-            this.Gun.Location = new System.Drawing.Point(598, 910);
+            this.Gun.Image = global::WarThreads.Properties.Resources.SpaceFighter;
+            this.Gun.Location = new System.Drawing.Point(656, 920);
             this.Gun.Name = "Gun";
             this.Gun.Size = new System.Drawing.Size(40, 40);
             this.Gun.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -47,19 +48,21 @@
             this.panelGameSreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelGameSreen.Location = new System.Drawing.Point(0, 0);
             this.panelGameSreen.Name = "panelGameSreen";
-            this.panelGameSreen.Size = new System.Drawing.Size(1341, 972);
+            this.panelGameSreen.Size = new System.Drawing.Size(778, 344);
             this.panelGameSreen.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1341, 972);
+            this.ClientSize = new System.Drawing.Size(778, 344);
             this.Controls.Add(this.panelGameSreen);
             this.Controls.Add(this.Gun);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "War Threads";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.Gun)).EndInit();
             this.ResumeLayout(false);
 
