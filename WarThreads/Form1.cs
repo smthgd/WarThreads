@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,8 @@ namespace WarThreads
         {
             InitializeComponent();
 
-            Gun.Location = new Point(panelGameSreen.Width / 2, panelGameSreen.Height - 100);
+            Gun.Location = new Point(panelGameSreen.Width / 2, panelGameSreen.Height - 40);
+            Gun.Tag = "Gun";
 
             StartGame();
         }
@@ -54,7 +56,6 @@ namespace WarThreads
 
             panelGameSreen.Controls.Clear();
             panelGameSreen.Controls.Add(Gun);
-
         }
 
         private void GenerateEnemies()
@@ -82,7 +83,7 @@ namespace WarThreads
             string enemyPictureName = "Enemy" + random.Next(1, 4).ToString() + ".png";
 
             // Выбор случайного изображения врага
-            Image image = Image.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", enemyPictureName));
+            Image image = Image.FromFile(Path.Combine(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Images"), enemyPictureName));
 
             var size = new Size(20, 20);
             int numberLives = 1;
@@ -119,7 +120,7 @@ namespace WarThreads
             }));
 
             // Пока противник находится в пределах экрана
-            while ((direction == 1 && x <= panelGameSreen.Width) || (direction == -1 && x >= 0))
+            while (((direction == 1 && x <= panelGameSreen.Width) || (direction == -1 && x >= 0)) && isGameStarted)
             {
                 for (int i = 0; i < 10; i++)
                 {
@@ -147,11 +148,16 @@ namespace WarThreads
 
                 x += direction * speed;
 
-                // Обновляем положение врага
-                enemy.Location = new Point(x, enemy.Location.Y);
+                panelGameSreen.Invoke(new Action(() =>
+                {
+                    enemy.Location = new Point(x, enemy.Location.Y);
+                }));
             }
 
-            HandleMiss(enemy);
+            if (isGameStarted)
+            {
+                HandleMiss(enemy);
+            }
         }
 
         private void IncreaseSpeed()
@@ -188,15 +194,16 @@ namespace WarThreads
             UpdateScore();
 
             // Проверка условия завершения игры
-            if (missCount >= 30)
+            if (missCount >= 10)
             {
+                isGameStarted = false;
                 GameOver();
             }
         }
 
         private void UpdateScore()
         {
-            string title = string.Format($"Война потоков - Попаданий: {hitCount}, Промахов: {missCount}");
+            string title = string.Format($"War Threads - Попаданий: {hitCount}, Промахов: {missCount}");
 
             if (InvokeRequired)
             {
@@ -224,8 +231,15 @@ namespace WarThreads
                 panelGameSreen.Controls.Remove(bullet);
             }));
 
-            // Выстрел сделан - добавить 1 к семафору
-            BulletSemaphore.Release();
+            try
+            {
+                // Выстрел сделан - добавить 1 к семафору
+                BulletSemaphore.Release();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"Возникла необработанная ошибка: {ex}", "Ошибка", MessageBoxButtons.OK);
+            }
 
             bullet.Tag = "deleted";
         }
@@ -237,7 +251,10 @@ namespace WarThreads
                 MessageBox.Show($"Вы проиграли! Попаданий: {hitCount}, Промахов: {missCount}", "Война потоков",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                Close();
+                panelGameSreen.Invoke(new Action(() =>
+                {
+                    Close();
+                }));
             }
         }
 

@@ -48,17 +48,20 @@
             this.panelGameSreen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelGameSreen.Location = new System.Drawing.Point(0, 0);
             this.panelGameSreen.Name = "panelGameSreen";
-            this.panelGameSreen.Size = new System.Drawing.Size(778, 344);
+            this.panelGameSreen.Size = new System.Drawing.Size(1267, 519);
             this.panelGameSreen.TabIndex = 1;
+            this.panelGameSreen.Tag = "GameSreen";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(778, 344);
+            this.ClientSize = new System.Drawing.Size(1267, 519);
             this.Controls.Add(this.panelGameSreen);
             this.Controls.Add(this.Gun);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "War Threads";
