@@ -28,21 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.Gun = new System.Windows.Forms.PictureBox();
+            this.panelGameSreen = new System.Windows.Forms.Panel();
+            ((System.ComponentModel.ISupportInitialize)(this.Gun)).BeginInit();
             this.SuspendLayout();
+            // 
+            // Gun
+            // 
+            this.Gun.Location = new System.Drawing.Point(598, 910);
+            this.Gun.Name = "Gun";
+            this.Gun.Size = new System.Drawing.Size(40, 40);
+            this.Gun.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Gun.TabIndex = 0;
+            this.Gun.TabStop = false;
+            // 
+            // panelGameSreen
+            // 
+            this.panelGameSreen.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelGameSreen.Location = new System.Drawing.Point(0, 0);
+            this.panelGameSreen.Name = "panelGameSreen";
+            this.panelGameSreen.Size = new System.Drawing.Size(1341, 972);
+            this.panelGameSreen.TabIndex = 1;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1341, 972);
+            this.Controls.Add(this.panelGameSreen);
+            this.Controls.Add(this.Gun);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "War Threads";
+            ((System.ComponentModel.ISupportInitialize)(this.Gun)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private System.Windows.Forms.PictureBox Gun;
+        private System.Windows.Forms.Panel panelGameSreen;
     }
 }
 

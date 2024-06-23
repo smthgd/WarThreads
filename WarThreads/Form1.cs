@@ -15,6 +15,8 @@ namespace WarThreads
         public MainForm()
         {
             InitializeComponent();
+
+            Gun.Location = new Point(panelGameSreen.Width / 2, panelGameSreen.Height - 40);
         }
     }
 }
