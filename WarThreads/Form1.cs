@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WarThreads
@@ -24,10 +17,10 @@ namespace WarThreads
 
         private static Random random = new Random();
 
-        private readonly Semaphore BulletSemaphore = new Semaphore(MaxBullets, MaxBullets); // семафор для ограничения количества пуль
+        private readonly Semaphore bulletSemaphore = new Semaphore(MaxBullets, MaxBullets); // Семафор для ограничения количества пуль
         private readonly AutoResetEvent startEvent = new AutoResetEvent(false);
 
-        private Mutex screenlock = new Mutex(); // объект блокировки экрана
+        private Mutex screenlock = new Mutex(); // Объект блокировки экрана
 
         public MainForm()
         {
@@ -60,6 +53,7 @@ namespace WarThreads
 
         private void GenerateEnemies()
         {
+            // Если за 15 секунд пользователь не нажал кнопки, игра начинается автоматически
             if (startEvent.WaitOne(15000))
             {
                 isGameStarted = true;
@@ -80,18 +74,17 @@ namespace WarThreads
 
         private void CreateEnemy()
         {
-            string enemyPictureName = "Enemy" + random.Next(1, 4).ToString() + ".png";
-
             // Выбор случайного изображения врага
+            string enemyPictureName = "Enemy" + random.Next(1, 4).ToString() + ".png";
             Image image = Image.FromFile(Path.Combine(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Images"), enemyPictureName));
 
             var size = new Size(20, 20);
             int numberLives = 1;
 
-            // Случайная координата y
-            int y = random.Next(panelGameSreen.Height - 50);
+            // Случайное значение координаты по Y
+            int y = random.Next(panelGameSreen.Height - 70);
 
-            // Большой корабль
+            // Генерация большого врага с определенным шансом
             if (random.Next(100) < 5)
             {
                 size = new Size(panelGameSreen.Width / 2, panelGameSreen.Height / 2);
@@ -99,10 +92,10 @@ namespace WarThreads
                 numberLives = 1000;
             }
 
-            // Нечетные y появляются слева, четные y появляются справа
+            // Нечетные значения координаты Y появляются слева, четные - справа
             int x = y % 2 != 0 ? 0 : panelGameSreen.Width;
 
-            // Установить направление в зависимости от начальной позиции
+            // Устанавливаем направление в зависимости от начальной позиции
             int direction = x == 0 ? 1 : -1;
 
             PictureBox enemy = new PictureBox
@@ -119,7 +112,7 @@ namespace WarThreads
                 panelGameSreen.Controls.Add(enemy);
             }));
 
-            // Пока противник находится в пределах экрана
+            // Пока игра идет и противник находится в пределах экрана
             while (((direction == 1 && x <= panelGameSreen.Width) || (direction == -1 && x >= 0)) && isGameStarted)
             {
                 for (int i = 0; i < 10; i++)
@@ -128,7 +121,7 @@ namespace WarThreads
 
                     foreach (Control control in panelGameSreen.Controls)
                     {
-                        // Проверяем столкновение врага с пулей
+                        // Проверка столкновения врага с пулей
                         if (control is PictureBox bullet && bullet.Tag.ToString() == "bullet")
                         {
                             if (bullet.Bounds.IntersectsWith(enemy.Bounds))
@@ -139,6 +132,7 @@ namespace WarThreads
                                 {
                                     HandleHit(enemy);
                                     DeleteBullet(bullet);
+
                                     return;
                                 }
                             }
@@ -194,7 +188,7 @@ namespace WarThreads
             UpdateScore();
 
             // Проверка условия завершения игры
-            if (missCount >= 10)
+            if (missCount >= 30)
             {
                 isGameStarted = false;
                 GameOver();
@@ -233,8 +227,8 @@ namespace WarThreads
 
             try
             {
-                // Выстрел сделан - добавить 1 к семафору
-                BulletSemaphore.Release();
+                // При выстреле добавляем 1 к семафору
+                bulletSemaphore.Release();
             }
             catch (Exception ex) 
             {
@@ -261,12 +255,11 @@ namespace WarThreads
         private void FireBullet()
         {
             // Если семафор равен 0, выстрела не происходит
-            if (!BulletSemaphore.WaitOne(0))
+            if (!bulletSemaphore.WaitOne(0))
             {
                 return;
             }
             
-            // Отобразить пулю
             PictureBox bullet = new PictureBox
             {
                 Image = Image.FromFile(Path.Combine(Path.Combine(Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.FullName, "Images"), "Bullet.png")),
@@ -276,12 +269,12 @@ namespace WarThreads
                 Tag = "bullet"
             };
 
-            // Добавляем пулю на панель
             panelGameSreen.Invoke(new Action(() =>
             {
                 panelGameSreen.Controls.Add(bullet);
             }));
 
+            // Передвижение пули и удаление при выходе за границы экрана
             while (bullet.Location.Y >= 0)
             {
                 panelGameSreen.Invoke(new Action(() =>
@@ -303,7 +296,6 @@ namespace WarThreads
         {
             int step = 20; // Шаг перемещения пушки
 
-            // Проверяем нажатую клавишу и перемещаем пушку соответственно
             if (e.KeyCode == Keys.Left)
             {
                 startEvent.Set();
